@@ -15,6 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AnotherCalcActivity" android:label="別画面で計算中"></activity>
     </application>
 
 </manifest>
