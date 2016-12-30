@@ -7,11 +7,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class AnotherCalcActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener {
+public class AnotherCalcActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener{
 
     private EditText numberInput1;
     private EditText numberInput2;
@@ -30,6 +31,18 @@ public class AnotherCalcActivity extends AppCompatActivity implements TextWatche
         numberInput2.addTextChangedListener(this);
 
         operatorSelector = (Spinner) findViewById(R.id.operatorSelector);
+        operatorSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                refreshResult();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         calcResult = (TextView) findViewById(R.id.calcResult);
 
         findViewById(R.id.backButton).setOnClickListener(this);
