@@ -1,4 +1,4 @@
-package tsyki.java_conf.gr.jp.calculator;
+package jp.gr.java_conf.tsyki.calculator;
 
 import org.junit.Test;
 

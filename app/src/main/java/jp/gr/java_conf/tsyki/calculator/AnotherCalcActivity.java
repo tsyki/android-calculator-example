@@ -1,8 +1,8 @@
-package tsyki.java_conf.gr.jp.calculator;
+package jp.gr.java_conf.tsyki.calculator;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,11 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener {
-
-    private static final int REQUEST_CODE_ANOTHER_CALC_1 = 1;
-
-    private static final int REQUEST_CODE_ANOTHER_CALC_2 = 2;
+public class AnotherCalcActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener{
 
     private EditText numberInput1;
     private EditText numberInput2;
@@ -27,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_another_calc);
 
         numberInput1 = (EditText) findViewById(R.id.numberInput1);
         numberInput1.addTextChangedListener(this);
@@ -49,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
         });
         calcResult = (TextView) findViewById(R.id.calcResult);
 
-        findViewById(R.id.calcButton1).setOnClickListener(this);
-        findViewById(R.id.calcButton2).setOnClickListener(this);
-        findViewById(R.id.nextButton).setOnClickListener(this);
+        findViewById(R.id.backButton).setOnClickListener(this);
     }
 
     private boolean isInputted() {
@@ -76,46 +70,18 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.calcButton1:
-                Intent intent1 = new Intent(this, AnotherCalcActivity.class);
-                startActivityForResult(intent1, REQUEST_CODE_ANOTHER_CALC_1);
-                break;
-            case R.id.calcButton2:
-                Intent intent2 = new Intent(this, AnotherCalcActivity.class);
-                startActivityForResult(intent2, REQUEST_CODE_ANOTHER_CALC_2);
-                break;
-            case R.id.nextButton:
-                if(isInputted()){
-                    int result = calc();
-                    numberInput1.setText(String.valueOf(result));
-                    refreshResult();
+            case R.id.backButton:
+                if (!isInputted()) {
+                    setResult(RESULT_CANCELED);
+                    break;
                 }
+                int result = calc();
+                Intent returnResultData = new Intent();
+                returnResultData.putExtra("result", result);
+                setResult(RESULT_OK, returnResultData);
                 break;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-
-        Bundle resultBundle = data.getExtras();
-        if (!resultBundle.containsKey("result")) {
-            return;
-        }
-        int result = resultBundle.getInt("result");
-
-        if (requestCode == REQUEST_CODE_ANOTHER_CALC_1) {
-            numberInput1.setText(String.valueOf(result));
-        } else if (requestCode == REQUEST_CODE_ANOTHER_CALC_2) {
-            numberInput2.setText(String.valueOf(result));
-        } else {
-            throw new IllegalStateException(String.valueOf(resultCode));
-        }
-        refreshResult();
+        finish();
     }
 
     private void refreshResult() {
